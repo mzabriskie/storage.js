@@ -1,4 +1,4 @@
 Storage.js
 ==========
 
-JavaScript storage facade
+JavaScript storage adapter
