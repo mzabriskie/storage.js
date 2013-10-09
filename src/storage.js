@@ -1,4 +1,4 @@
-(function (window) {
+(function (window, document) {
 
     var cookie, local, session,
         Storage,
@@ -34,7 +34,7 @@
         return keys;
     };
 
-    // CookieAdapter (cookies)
+    // CookieAdapter (document.cookie)
     CookieAdapter = function () {};
 
     CookieAdapter.prototype.set = function (key, val, expires, path, domain, secure) {
@@ -79,13 +79,14 @@
         }
     };
 
+    var RX_COOKIE = /(^|;)\s*(.*?)\s*=\s*(.*?)(;|$)/;
     CookieAdapter.prototype.keys = function () {
         var keys = [],
             parts = document.cookie.split(';');
 
         for (var i=0, l=parts.length; i<l; i++) {
             if (parts[i].length > 0) {
-                var match = parts[i].match(/(^|;)\s*(.*?)\s*=\s*(.*?)(;|$)/);
+                var match = parts[i].match(RX_COOKIE);
                 if (match) {
                     keys.push(match[2]);
                 }
@@ -122,4 +123,4 @@
     } else {
         window.Storage = Storage;
     }
-})(window);
+})(window, document);
