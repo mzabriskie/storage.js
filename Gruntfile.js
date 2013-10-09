@@ -4,6 +4,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.initConfig({
         jshint: {
@@ -24,6 +25,12 @@ module.exports = function(grunt) {
                 files: [
                     {src: 'src/storage.js', dest: 'dist/', expand: true, flatten: true}
                 ]
+            }
+        },
+        watch: {
+            src: {
+                files: ['src/storage.js', 'test/spec.js'],
+                tasks: ['jshint', 'qunit']
             }
         }
     });
