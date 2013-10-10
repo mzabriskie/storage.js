@@ -18,6 +18,8 @@
         if (val != existing) {
             EventService.fireEvent(this.type, key, [existing, val]);
         }
+
+        return this;
     };
 
     StorageAdapter.prototype.get = function (key) {
@@ -27,6 +29,8 @@
     StorageAdapter.prototype.remove = function (key) {
         this.set(key, null); // Set is called for the sake of firing value change event
         this.store.removeItem(key);
+
+        return this;
     };
 
     StorageAdapter.prototype.clear = function () {
@@ -36,6 +40,8 @@
         while (i--) {
             this.remove(keys[i]);
         }
+
+        return this;
     };
 
     StorageAdapter.prototype.keys = function () {

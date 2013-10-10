@@ -131,4 +131,14 @@ QUnit.test('session methods', function (assert) {
         assert.equal(data2.oldVal, 1);
         assert.equal(data2.newVal, null);
     });
+
+    QUnit.test('chaining', function (assert) {
+        assert.equal(storage
+                    .clear()
+                    .set('foo', 1)
+                    .set('bar', 2)
+                    .set('baz', 3)
+                    .remove('bar')
+                    .keys().length, 2);
+    });
 });
