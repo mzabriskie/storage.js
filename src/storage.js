@@ -1,39 +1,41 @@
 (function (window, document) {
 
     var cookie, local, session,
+        stores,
+        cookieStorage,
         Storage,
-        StorageAdapter;
+        Adapter;
 
-    // StorageAdapter
-    StorageAdapter = function (store, type) {
-        this.store = store;
+    // Adapter
+    Adapter = function (type) {
         this.type = type;
+        this.store = stores[type];
     };
 
-    StorageAdapter.prototype.set = function (key, val) {
-        var existing = this.get(key);
+    Adapter.prototype.set = function (key, val) {
+        var oldValue = this.get(key);
 
         this.store.setItem.apply(this.store, arguments);
 
-        if (val != existing) {
-            EventService.fireEvent(this.type, key, [existing, val]);
+        if (val != oldValue) {
+            EventService.fireEvent(this.type, key, [oldValue, val]);
         }
 
         return this;
     };
 
-    StorageAdapter.prototype.get = function (key) {
+    Adapter.prototype.get = function (key) {
         return this.store.getItem(key);
     };
 
-    StorageAdapter.prototype.remove = function (key) {
+    Adapter.prototype.remove = function (key) {
         this.set(key, null); // Set is called for the sake of firing value change event
         this.store.removeItem(key);
 
         return this;
     };
 
-    StorageAdapter.prototype.clear = function () {
+    Adapter.prototype.clear = function () {
         // Manually removing items for the sake of firing value change event
         var keys = this.keys(),
             i = keys.length;
@@ -44,9 +46,9 @@
         return this;
     };
 
-    StorageAdapter.prototype.keys = function () {
+    Adapter.prototype.keys = function () {
         var keys = [];
-        if (this.type === 'cookie') {
+        if (typeof this.store.keys === 'function') {
             keys = this.store.keys();
         } else {
             for (var key in this.store) {
@@ -58,19 +60,25 @@
         return keys;
     };
 
-    StorageAdapter.prototype.watch = function (key, callback) {
+    Adapter.prototype.watch = function (key, callback) {
         EventService.addEvent(this.type, key, callback);
     };
 
-    StorageAdapter.prototype.unwatch = function (key, callback) {
+    Adapter.prototype.unwatch = function (key, callback) {
         EventService.removeEvent(this.type, key, callback);
     };
 
+    Adapter.prototype.forEach = function (callback) {
+        var keys = this.keys();
+        for (var i=0, l=keys.length; i<l; i++) {
+            callback(this.get(keys[i]), keys[i]);
+        }
+    };
+
     // Simulating local/sessionStorage for cookies
-    var cookieStorage = {
+    cookieStorage = {
         setItem: function (key, val, expires, path, domain, secure) {
-            var cookie = [],
-                existing = this.getItem(key);
+            var cookie = [];
             cookie.push(key + '=' + encodeURIComponent(val || ''));
 
             if (typeof expires === 'number') {
@@ -92,10 +100,6 @@
             }
 
             document.cookie = cookie.join('; ');
-
-            if (val != existing) {
-                EventService.fireEvent('cookie', key, [existing, val]);
-            }
         },
 
         getItem: function (key) {
@@ -177,23 +181,30 @@
         }
     };
 
+    // Mapping of available stores
+    stores = {
+        'cookie': cookieStorage,
+        'local': localStorage,
+        'session': sessionStorage
+    };
+
     // Storage API that is publicly exposed
     Storage = {
         cookie: function () {
             if (!cookie) {
-                cookie = new StorageAdapter(cookieStorage, 'cookie');
+                cookie = new Adapter('cookie');
             }
             return cookie;
         },
         local: function () {
             if (!local) {
-                local = new StorageAdapter(localStorage, 'local');
+                local = new Adapter('local');
             }
             return local;
         },
         session: function () {
             if (!session) {
-                session = new StorageAdapter(sessionStorage, 'session');
+                session = new Adapter('session');
             }
             return session;
         }
