@@ -170,6 +170,21 @@ QUnit.test('session methods', function (assert) {
                     .set('foo', 5)
                     .keys().length, 2);
     });
+
+    QUnit.test('length', function (assert) {
+        assert.equal(storage.length, 0);
+
+        storage.set('foo', 1);
+        storage.set('bar', 2);
+        storage.set('baz', 3);
+        assert.equal(storage.length, 3);
+
+        storage.remove('bar');
+        assert.equal(storage.length, 2);
+
+        storage.clear();
+        assert.equal(storage.length, 0);
+    });
 });
 
 //QUnit.module('local');

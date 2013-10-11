@@ -10,12 +10,14 @@
     Adapter = function (type) {
         this.type = type;
         this.store = stores[type];
+        this.length = this.store.length;
     };
 
     Adapter.prototype.set = function (key, val) {
         var oldValue = this.get(key);
 
         this.store.setItem.apply(this.store, arguments);
+        this.length = this.store.length;
 
         if (val != oldValue) {
             EventService.fireEvent(this.type, key, [oldValue, val]);
@@ -31,6 +33,7 @@
     Adapter.prototype.remove = function (key) {
         this.set(key, null); // Set is called for the sake of firing value change event
         this.store.removeItem(key);
+        this.length = this.store.length;
 
         return this;
     };
@@ -81,6 +84,8 @@
 
     // Simulating local/sessionStorage for cookies
     cookieStorage = {
+        length: 0,
+
         setItem: function (key, val, expires, path, domain, secure) {
             var cookie = [];
             cookie.push(key + '=' + encodeURIComponent(val || ''));
@@ -104,6 +109,8 @@
             }
 
             document.cookie = cookie.join('; ');
+
+            this.length = this.keys().length;
         },
 
         getItem: function (key) {
@@ -119,7 +126,7 @@
             var keys = this.keys(),
                 i = keys.length;
             while (i--) {
-                this.remove(keys[i]);
+                this.removeItem(keys[i]);
             }
         },
 
@@ -140,6 +147,7 @@
             return keys;
         }
     };
+    cookieStorage.length = cookieStorage.keys().length;
 
     // Pub/Sub Service
     EventService = {
