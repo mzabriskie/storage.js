@@ -4,7 +4,6 @@
         stores,
         cookieStorage,
         EventService,
-        Storage,
         Adapter;
 
     // Adapter
@@ -193,32 +192,27 @@
         'session': sessionStorage
     };
 
-    // Storage API that is publicly exposed
-    Storage = {
-        cookie: function () {
+    // Expose methods on existing Storage interface
+    if (typeof window.Storage === 'undefined') {
+        window.Storage = function () {};
+    }
+
+    Storage.cookie = function () {
             if (!cookie) {
                 cookie = new Adapter('cookie');
             }
             return cookie;
-        },
-        local: function () {
+        };
+    Storage.local = function () {
             if (!local) {
                 local = new Adapter('local');
             }
             return local;
-        },
-        session: function () {
+        };
+    Storage.session = function () {
             if (!session) {
                 session = new Adapter('session');
             }
             return session;
-        }
-    };
-
-    // Expose Storage
-    if (typeof define === 'function' && define.amd) {
-        define('Storage', [], function() { return Storage; });
-    } else {
-        window.Storage = Storage;
-    }
+        };
 })(window, document);
