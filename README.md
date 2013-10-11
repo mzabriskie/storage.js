@@ -59,10 +59,10 @@ Get the value from storage specified by `key`
 #### remove(key)
 Remove value from storage specified by `key`
 
-#### clear
+#### clear()
 Remove all values from storage
 
-#### keys
+#### keys()
 Get the keys of all the values in storage
 
 #### forEach(callback)
