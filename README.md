@@ -3,6 +3,17 @@ storage.js
 
 JavaScript storage adapter
 
+## Overview
+
+This library augments the native `Storage` interface by providing a common API for interfacing with `document.cookie`, `localStorage` and `sessionStorage`. This is done by adding three methods to `Storage`:
+
+* `Storage.cookie()`
+* `Storage.local()`
+* `Storage.session()`
+
+The API for each of these methods is identical. See Examples and API documentation below.
+
+
 ## Examples
 
 ```js
