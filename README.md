@@ -88,6 +88,44 @@ When watching changes `callback` will be called anytime `set`, `remove` or `clea
 #### unwatch(key, callback)
 Stop watching changes to value specified by `key`
 
+## Building
+
+First you will need to clone a copy of the storage.js repository:
+
+```bash
+git clone https://github.com/mzabriskie/storage.js.git
+```
+
+From the storage.js directory instal the Node dependencies:
+
+```bash
+cd storage.js && npm install
+```
+
+Now you can build the project:
+
+```bash
+grunt
+```
+
+This will run the tests and if they pass copy the built files to the `dist` directory.
+
+## Testing
+
+First you will need to clone the repo and install the Node dependencies (see the first two steps from Building above).
+
+Using grunt:
+
+```bash
+grunt test
+```
+
+Using npm:
+
+```bash
+npm test
+```
+
 ## License
 
 Released under the MIT license.
