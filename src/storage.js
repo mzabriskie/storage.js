@@ -3,6 +3,7 @@
     var cookie, local, session,
         stores,
         cookieStorage,
+        EventService,
         Storage,
         Adapter;
 
@@ -62,10 +63,14 @@
 
     Adapter.prototype.watch = function (key, callback) {
         EventService.addEvent(this.type, key, callback);
+
+        return this;
     };
 
     Adapter.prototype.unwatch = function (key, callback) {
         EventService.removeEvent(this.type, key, callback);
+
+        return this;
     };
 
     Adapter.prototype.forEach = function (callback) {
@@ -138,7 +143,7 @@
     };
 
     // Pub/Sub Service
-    var EventService = {
+    EventService = {
         registry: {},
 
         addEvent: function (adapter, key, callback) {

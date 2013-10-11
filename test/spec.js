@@ -165,6 +165,9 @@ QUnit.test('session methods', function (assert) {
                     .set('bar', 2)
                     .set('baz', 3)
                     .remove('bar')
+                    .watch('foo', function () {})
+                    .unwatch('foo', function () {})
+                    .set('foo', 5)
                     .keys().length, 2);
     });
 });
