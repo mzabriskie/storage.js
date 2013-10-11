@@ -88,6 +88,9 @@ When watching changes `callback` will be called anytime `set`, `remove` or `clea
 #### unwatch(key, callback)
 Stop watching changes to value specified by `key`
 
+#### length
+Property that tracks the number of values kept in storage
+
 ## Building
 
 First you will need to clone a copy of the storage.js repository:
