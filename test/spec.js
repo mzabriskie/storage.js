@@ -185,6 +185,12 @@ QUnit.test('session methods', function (assert) {
         storage.clear();
         assert.equal(storage.length, 0);
     });
+
+    QUnit.test('json', function (assert) {
+        storage.set('foo', {a:123, b:456, c: {d:'abc'}});
+        var val = storage.get('foo');
+        assert.equal(typeof val, 'object');
+    });
 });
 
 //QUnit.module('local');
@@ -219,14 +225,4 @@ QUnit.test('session methods', function (assert) {
 //    }
 //
 //    assert.ok(error);
-//});
-
-//['local', 'session'].forEach(function (type) {
-//    var storage = Storage[type]();
-//
-//    QUnit.test('json', function (assert) {
-//        storage.set('foo', {a:123, b:456, c: {d:'abc'}});
-//        var val = storage.get('foo');
-//        assert.equal(typeof val, 'object');
-//    });
 //});

@@ -14,9 +14,12 @@
     };
 
     Adapter.prototype.set = function (key, val) {
-        var oldValue = this.get(key);
+        var oldValue = this.get(key),
+            argv = arguments;
 
-        this.store.setItem.apply(this.store, arguments);
+        argv[1] = val !== null ? JSON.stringify(val) : null;
+
+        this.store.setItem.apply(this.store, argv);
         this.length = this.store.length;
 
         if (val != oldValue) {
@@ -27,7 +30,7 @@
     };
 
     Adapter.prototype.get = function (key) {
-        return this.store.getItem(key);
+        return JSON.parse(this.store.getItem(key));
     };
 
     Adapter.prototype.remove = function (key) {
