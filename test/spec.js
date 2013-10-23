@@ -187,9 +187,15 @@ QUnit.test('session methods', function (assert) {
     });
 
     QUnit.test('json', function (assert) {
-        storage.set('foo', {a:123, b:456, c: {d:'abc'}});
+        var date = new Date();
+        storage.set('foo', {a:123, b:456, c: {d:'abc'}, d: date});
         var val = storage.get('foo');
         assert.equal(typeof val, 'object');
+        assert.equal(typeof val.c, 'object');
+        assert.equal(val.a, 123);
+        assert.equal(val.b, 456);
+        assert.equal(val.c.d, 'abc');
+        assert.equal(val.d, date.toISOString());
     });
 });
 
