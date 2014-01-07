@@ -21,39 +21,42 @@ The API for each of these methods is identical. See Examples and API documentati
 // Storage.cookie() is being used for the sake of this example.
 // You could also use Storage.local() or Storage.session() and the API remains the same.
 
-// Add some values to cookie storage
-Storage.cookie().set('foo', 'a');
-Storage.cookie().set('bar', 'b');
-Storage.cookie().set('baz', 'c');
+// Create storage reference
+var store = Storage.cookie();
+
+// Add some values to storage
+store.set('foo', 'a');
+store.set('bar', 'b');
+store.set('baz', 'c');
 
 // Get values back individually
-console.log(Storage.cookie().get('foo'));
-console.log(Storage.cookie().get('bar'));
-console.log(Storage.cookie().get('baz'));
+console.log(store.get('foo'));
+console.log(store.get('bar'));
+console.log(store.get('baz'));
 
-// Iterate over all values in cookie storage
-Storage.cookie().forEach(function (val, key) {
+// Iterate over all values in storage
+store.forEach(function (val, key) {
 	console.log(key, '=', val);
 });
 
 // Get the keys for all the values
-console.log(Storage.cookie().keys()); // ['foo', 'bar', 'baz']
+console.log(store.keys()); // ['foo', 'bar', 'baz']
 
 // Start watching changes to foo
 function fooChange(oldVal, newVal) {
 	console.log('foo changed:', oldVal, newVal);
 }
-Storage.cookie().watch('foo', fooChange);
-Storage.cookie().set('foo', 'hello world');
+store.watch('foo', fooChange);
+store.set('foo', 'hello world');
 
 // Stop watching changes to foo
-Storage.cookie().unwatch('foo', fooChange);
+store.unwatch('foo', fooChange);
 
 // Remove a single value
-Storage.cookie().remove('bar');
+store.remove('bar');
 
 // Remove all values
-Storage.cookie().clear();
+store.clear();
 ```
 
 ## API
