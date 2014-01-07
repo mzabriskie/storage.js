@@ -22,6 +22,7 @@ The API for each of these methods is identical. See Examples and API documentati
 // You could also use Storage.local() or Storage.session() and the API remains the same.
 
 // Create storage reference
+// Could refactor to use Storage.local() or Storage.session() with no changes to code below.
 var store = Storage.cookie();
 
 // Add some values to storage
